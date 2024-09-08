@@ -1,6 +1,8 @@
 const User = require("../models/User/user");
 const SuccessHandler = require("../utils/SuccessHandler");
 const ErrorHandler = require("../utils/ErrorHandler");
+const path = require("path");
+
 //register
 const register = async (req, res) => {
   // #swagger.tags = ['auth']
@@ -80,9 +82,6 @@ const updateProfile = async (req, res) => {
     if (req.body.password) {
       user.password = req.body.password;
     }
-
-    let profileImage = user.profileImage;
-
     if(req.files && req.files.profileImage){
       const { profileImage } = req.files;
       const filePath = `/uploads/${profileImage.name}`;
