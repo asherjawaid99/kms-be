@@ -6,7 +6,11 @@ const dotenv = require("dotenv");
 const validator = require("validator");
 dotenv.config({ path: ".././src/config/config.env" });
 const userSchema = new Schema({
-  name: {
+  firstName: {
+    type: String,
+    required: true,
+  },
+  lastName: {
     type: String,
     required: true,
   },
@@ -27,31 +31,15 @@ const userSchema = new Schema({
   },
   role: {
     type: String,
-    enum: ["user", "admin"],
+    enum: ["user", "admin", "chef"],
     default: "user",
   },
   createdAt: {
     type: Date,
     default: Date.now(),
   },
-  emailVerified: {
-    type: Boolean,
-    default: false,
-  },
-  emailVerificationToken: {
-    type: Number,
-  },
-  emailVerificationTokenExpires: {
-    type: Date,
-  },
-  passwordResetToken: {
-    type: Number,
-  },
-  passwordResetTokenExpires: {
-    type: Date,
-  },
-  lastLogin: {
-    type: Date,
+  profileImage: {
+    type: String,
   },
   isActive: {
     type: Boolean,
@@ -77,6 +65,6 @@ userSchema.methods.comparePassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-const user = mongoose.model("user", userSchema);
+const User = mongoose.model("User", userSchema);
 
-module.exports = user;
+module.exports = User;
