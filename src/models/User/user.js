@@ -45,6 +45,15 @@ const userSchema = new Schema({
     type: Boolean,
     default: true,
   },
+  status: {
+    type: String,
+    enum: ["active", "inactive"],
+    default: "active",
+  },
+  kitchenNo: {
+    type: String,
+    default: "001",
+  },
 });
 
 //hash password before saving

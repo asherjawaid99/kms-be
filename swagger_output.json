@@ -17,16 +17,6 @@
     "application/json"
   ],
   "paths": {
-    "/auth/logout": {
-      "get": {
-        "tags": [
-          "auth"
-        ],
-        "description": "",
-        "parameters": [],
-        "responses": {}
-      }
-    },
     "/auth/register": {
       "post": {
         "tags": [
@@ -40,13 +30,19 @@
             "schema": {
               "type": "object",
               "properties": {
-                "name": {
+                "firstName": {
+                  "example": "any"
+                },
+                "lastName": {
                   "example": "any"
                 },
                 "email": {
                   "example": "any"
                 },
                 "password": {
+                  "example": "any"
+                },
+                "role": {
                   "example": "any"
                 }
               }
@@ -82,46 +78,66 @@
         "responses": {}
       }
     },
-    "/auth/requestEmailToken": {
-      "post": {
+    "/auth/profile": {
+      "get": {
         "tags": [
           "auth"
         ],
         "description": "",
         "parameters": [
           {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "example": "any"
-                }
-              }
-            }
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
-        "responses": {}
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
-    "/auth/verifyEmail": {
-      "post": {
+    "/auth/profile/{id}": {
+      "put": {
         "tags": [
           "auth"
         ],
         "description": "",
         "parameters": [
           {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
             "name": "body",
             "in": "body",
             "schema": {
               "type": "object",
               "properties": {
-                "email": {
+                "password": {
                   "example": "any"
                 },
-                "emailVerificationToken": {
+                "firstName": {
+                  "example": "any"
+                },
+                "lastName": {
+                  "example": "any"
+                },
+                "email": {
                   "example": "any"
                 }
               }
@@ -129,68 +145,84 @@
           }
         ],
         "responses": {
-          "400": {
-            "description": "Bad Request"
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
     },
-    "/auth/forgotPassword": {
+    "/newsletter/subscribe": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/meals/": {
+      "get": {
+        "tags": [
+          "meals"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      },
       "post": {
         "tags": [
-          "auth"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {}
-      }
-    },
-    "/auth/resetPassword": {
-      "put": {
-        "tags": [
-          "auth"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "example": "any"
-                },
-                "passwordResetToken": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {}
-      }
-    },
-    "/auth/updatePassword": {
-      "put": {
-        "tags": [
-          "auth"
+          "meals"
         ],
         "description": "",
         "parameters": [
@@ -205,10 +237,28 @@
             "schema": {
               "type": "object",
               "properties": {
-                "currentPassword": {
+                "title": {
                   "example": "any"
                 },
-                "newPassword": {
+                "description": {
+                  "example": "any"
+                },
+                "servings": {
+                  "example": "any"
+                },
+                "price": {
+                  "example": "any"
+                },
+                "stock": {
+                  "example": "any"
+                },
+                "discount": {
+                  "example": "any"
+                },
+                "category": {
+                  "example": "any"
+                },
+                "tags": {
                   "example": "any"
                 }
               }
@@ -218,6 +268,374 @@
         "responses": {
           "401": {
             "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/meals/{id}": {
+      "get": {
+        "tags": [
+          "meals"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      },
+      "put": {
+        "tags": [
+          "meals"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                },
+                "servings": {
+                  "example": "any"
+                },
+                "price": {
+                  "example": "any"
+                },
+                "stock": {
+                  "example": "any"
+                },
+                "discount": {
+                  "example": "any"
+                },
+                "category": {
+                  "example": "any"
+                },
+                "tags": {
+                  "example": "any"
+                },
+                "previousImages": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "meals"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/meals/category": {
+      "get": {
+        "tags": [
+          "meals"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "post": {
+        "tags": [
+          "meals"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "category": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/chef/": {
+      "get": {
+        "tags": [
+          "chefs"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/chef/{id}": {
+      "get": {
+        "tags": [
+          "chefs"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/chef/mark-attendance": {
+      "get": {
+        "tags": [
+          "chefs"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/chef/low-stock/{mealId}": {
+      "get": {
+        "tags": [
+          "chefs"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "mealId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/chef/get-attendance/{userId}": {
+      "post": {
+        "tags": [
+          "chefs"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "startDate": {
+                  "example": "any"
+                },
+                "endDate": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"

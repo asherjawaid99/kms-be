@@ -2,6 +2,7 @@ const User = require("../models/User/user");
 const SuccessHandler = require("../utils/SuccessHandler");
 const ErrorHandler = require("../utils/ErrorHandler");
 const path = require("path");
+const sendNotification = require("../utils/sendNotification");
 
 //register
 const register = async (req, res) => {
@@ -28,7 +29,23 @@ const register = async (req, res) => {
       role,
     });
     newUser.save();
-    return SuccessHandler("User created successfully", 200, res);
+    SuccessHandler("User created successfully", 200, res);
+    if (role === "chef") {
+      const admins = await User.find({ role: "admin" });
+      Promise.all(
+        admins.map(async (admin) => {
+          await sendNotification(
+            admin._id,
+            "New chef",
+            `${newUser.firstName} ${newUser.lastName} has been registered as a chef`,
+            "newChef",
+            {
+              chefId: newUser._id,
+            }
+          );
+        })
+      );
+    }
   } catch (error) {
     return ErrorHandler(error.message, 500, req, res);
   }
