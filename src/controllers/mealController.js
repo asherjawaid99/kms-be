@@ -7,9 +7,27 @@ const path = require("path");
 const getAllMeals = async (req, res) => {
   // #swagger.tags = ['meals']
   try {
+    const searchFilter = req.query.search
+      ? { title: { $regex: req.query.search, $options: "i" } }
+      : {};
+
+    const categoryFilter =
+      req.query.category && req.query.category !== "all"
+        ? { category: req.query.category }
+        : {};
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
     const meals = await Meal.find({
+      ...searchFilter,
+      ...categoryFilter,
       isActive: true,
-    });
+    })
+      .populate("category")
+      .skip(skip)
+      .limit(limit);
     return SuccessHandler(meals, 200, res);
   } catch (error) {
     return ErrorHandler(error.message, 500, req, res);
@@ -19,7 +37,7 @@ const getAllMeals = async (req, res) => {
 const getMeal = async (req, res) => {
   // #swagger.tags = ['meals']
   try {
-    const meal = await Meal.findById(req.params.id);
+    const meal = await Meal.findById(req.params.id).populate("category");
     if (!meal) {
       return ErrorHandler("Meal not found", 404, req, res);
     }

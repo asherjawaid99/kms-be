@@ -7,16 +7,25 @@ const path = require("path");
 const register = async (req, res) => {
   // #swagger.tags = ['auth']
   try {
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password, role } = req.body;
     const user = await User.findOne({ email });
     if (user) {
       return ErrorHandler("User already exists", 400, req, res);
+    }
+    if (role === admin) {
+      return ErrorHandler(
+        "You are not authorized to create an admin",
+        400,
+        req,
+        res
+      );
     }
     const newUser = await User.create({
       firstName,
       lastName,
       email,
       password,
+      role,
     });
     newUser.save();
     return SuccessHandler("User created successfully", 200, res);
@@ -39,7 +48,7 @@ const login = async (req, res) => {
     if (!isMatch) {
       return ErrorHandler("Invalid credentials", 400, req, res);
     }
-   
+
     jwtToken = user.getJWTToken();
     return SuccessHandler(
       {
@@ -80,15 +89,18 @@ const updateProfile = async (req, res) => {
     if (req.body.password) {
       user.password = req.body.password;
     }
-    if(req.files && req.files.profileImage){
+    if (req.files && req.files.profileImage) {
       const { profileImage } = req.files;
       const filePath = `/uploads/${profileImage.name}`;
-      profileImage.mv(path.join(__dirname, `../../uploads`, profileImage.name), (err) => {
-        if (err) {
-          console.log(err);
-          return res.json({ err });
+      profileImage.mv(
+        path.join(__dirname, `../../uploads`, profileImage.name),
+        (err) => {
+          if (err) {
+            console.log(err);
+            return res.json({ err });
+          }
         }
-      });
+      );
       user.profileImage = filePath;
     }
     await user.save();
