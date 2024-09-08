@@ -39,9 +39,7 @@ const login = async (req, res) => {
     if (!isMatch) {
       return ErrorHandler("Invalid credentials", 400, req, res);
     }
-    if (!user.emailVerified) {
-      return ErrorHandler("Email not verified", 400, req, res);
-    }
+   
     jwtToken = user.getJWTToken();
     return SuccessHandler(
       {

@@ -1,6 +1,7 @@
 const SuccessHandler = require("../utils/SuccessHandler");
 const ErrorHandler = require("../utils/ErrorHandler");
 const Meal = require("../models/Meals/meals");
+const Category = require("../models/Meals/category");
 const path = require("path");
 
 const getAllMeals = async (req, res) => {
@@ -141,10 +142,35 @@ const deleteMeal = async (req, res) => {
   }
 };
 
+const getAllCategories = async (req, res) => {
+  // #swagger.tags = ['meals']
+  try {
+    const categories = await Category.find();
+    return SuccessHandler(categories, 200, res);
+  } catch (error) {
+    return ErrorHandler(error.message, 500, req, res);
+  }
+};
+
+const createCategory = async (req, res) => {
+  // #swagger.tags = ['meals']
+  try {
+    const { category } = req.body;
+    const meal = await Category.create({
+      category,
+    });
+    return SuccessHandler(meal, 201, res);
+  } catch (error) {
+    return ErrorHandler(error.message, 500, req, res);
+  }
+};
+
 module.exports = {
   getAllMeals,
   getMeal,
   createMeal,
   updateMeal,
   deleteMeal,
+  getAllCategories,
+  createCategory,
 };

@@ -28,8 +28,8 @@ const mealSchema = new Schema(
       required: true,
     },
     category: {
-      type: String,
-      required: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
     },
     tags: {
       type: [String],
