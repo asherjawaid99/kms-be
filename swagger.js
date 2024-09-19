@@ -1,8 +1,9 @@
 const swaggerAutogen = require("swagger-autogen")();
 const doc = {
   info: {
-    title: "Cloudfront",
-    description: "Cloudfront api endpoints",
+    title: "KMS BE API documentation",
+    description:
+      "Profile Image key: profileImage, meal images key: images, notification socket key: notification",
     version: "1.0.0",
   },
   host: "localhost:8001",

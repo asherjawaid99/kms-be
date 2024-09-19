@@ -10,7 +10,7 @@ router.route("/:id").put(isAuthenticated, isAdmin, meals.updateMeal);
 router.route("/:id").delete(isAuthenticated, isAdmin, meals.deleteMeal);
 
 // category routes
-router.route("/category").get(meals.getAllCategories);
+router.route("/category/get").get(meals.getAllCategories);
 router.route("/category").post(isAuthenticated, isAdmin, meals.createCategory);
 
 module.exports = router;

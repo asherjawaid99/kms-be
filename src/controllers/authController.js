@@ -13,7 +13,7 @@ const register = async (req, res) => {
     if (user) {
       return ErrorHandler("User already exists", 400, req, res);
     }
-    if (role === admin) {
+    if (role === "admin") {
       return ErrorHandler(
         "You are not authorized to create an admin",
         400,

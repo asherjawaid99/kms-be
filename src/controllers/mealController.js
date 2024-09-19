@@ -111,7 +111,7 @@ const updateMeal = async (req, res) => {
       previousImages,
     } = req.body;
 
-    let images = previousImages;
+    let images = JSON.parse(previousImages);
 
     if (req.files && req.files.images) {
       const imagePaths = req.files.images.map((image) => {
@@ -124,7 +124,7 @@ const updateMeal = async (req, res) => {
         })
       );
 
-      images = [...previousImages, ...imagePaths];
+      images = [...images, ...imagePaths];
     }
 
     meal.title = title;
@@ -174,6 +174,10 @@ const createCategory = async (req, res) => {
   // #swagger.tags = ['meals']
   try {
     const { category } = req.body;
+    const exCategory = await Category.findOne({ category });
+    if (exCategory) {
+      return ErrorHandler("Category already exists", 400, req, res);
+    }
     const meal = await Category.create({
       category,
     });

@@ -89,7 +89,7 @@ const updateChef = async (req, res) => {
 const lowStock = async (req, res) => {
   // #swagger.tags = ['chefs']
   try {
-    const { mealId } = req.body;
+    const { mealId } = req.params;
     const meal = await Meal.findById(mealId);
     if (!meal) {
       return ErrorHandler("Meal not found", 404, req, res);
@@ -120,24 +120,24 @@ const lowStock = async (req, res) => {
 const markAttendance = async (req, res) => {
   // #swagger.tags = ['chefs']
   try {
-    const chef = await User.findById(req.params.id);
+    const chef = await User.findById(req.user._id);
     if (!chef) {
       return ErrorHandler("Chef not found", 404, req, res);
     }
     const attendance = await Attendance.findOne({
-      user: req.params.id,
+      user: req.user._id,
       date: new Date().toDateString(),
     });
     if (attendance) {
       return ErrorHandler("Attendance already marked", 400, req, res);
     }
     const newAttendance = await Attendance.create({
-      user: req.params.id,
+      user: req.user._id,
       date: new Date().toDateString(),
     });
-    newAttendance.save();
+    await newAttendance.save();
     await chef.save();
-    return SuccessHandler(attendance, 200, res);
+    return SuccessHandler(`Attendance marked`, 200, res);
   } catch (error) {
     return ErrorHandler(error.message, 500, req, res);
   }
