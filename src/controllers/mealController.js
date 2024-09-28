@@ -174,12 +174,14 @@ const createCategory = async (req, res) => {
   // #swagger.tags = ['meals']
   try {
     const { category } = req.body;
-    const exCategory = await Category.findOne({ category });
+    const exCategory = await Category.findOne({ 
+      name: category
+     });
     if (exCategory) {
       return ErrorHandler("Category already exists", 400, req, res);
     }
     const meal = await Category.create({
-      category,
+      name: category,
     });
     return SuccessHandler(meal, 201, res);
   } catch (error) {

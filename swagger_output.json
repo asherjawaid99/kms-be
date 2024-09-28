@@ -835,6 +835,9 @@
     },
     "/notification/": {
       "get": {
+        "tags": [
+          "Notifications"
+        ],
         "description": "",
         "parameters": [
           {
@@ -861,6 +864,9 @@
     },
     "/notification/unread-count": {
       "get": {
+        "tags": [
+          "Notifications"
+        ],
         "description": "",
         "parameters": [
           {
@@ -880,6 +886,48 @@
             "description": "Internal Server Error"
           }
         }
+      }
+    },
+    "/dashboard/": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/dashboard/income": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/dashboard/orders": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {}
       }
     }
   }

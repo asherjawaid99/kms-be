@@ -3,6 +3,7 @@ const ErrorHandler = require("../utils/ErrorHandler");
 const Notification = require("../models/User/notification");
 
 const getAllNotifications = async (req, res) => {
+  // #swagger.tags = ['Notifications']
   try {
     const notifications = await Notification.find({ user: req.user._id }).sort({
       createdAt: -1,
@@ -17,6 +18,7 @@ const getAllNotifications = async (req, res) => {
   }
 };
 const getUnreadCount = async (req, res) => {
+  // #swagger.tags = ['Notifications']
   try {
     const count = await Notification.countDocuments({
       user: req.user._id,
