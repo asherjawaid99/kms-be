@@ -1,5 +1,6 @@
 const SuccessHandler = require("../utils/SuccessHandler");
 const ErrorHandler = require("../utils/ErrorHandler");
+const sendNotification = require("../utils/sendNotification");
 const Meal = require("../models/Meals/meals");
 const Order = require("../models/User/order");
 const User = require("../models/User/user");
@@ -107,13 +108,7 @@ const createOrder = async (req, res) => {
 
     SuccessHandler(order, 201, res);
 
-    Promise.all(
-      meals.map(async (meal) => {
-        const mealDetails = await Meal.findById(meal._id);
-        mealDetails.stock -= meal.qty;
-        await mealDetails.save();
-      })
-    );
+    
 
     const admins = await User.find({ role: "admin" });
     Promise.all(
@@ -127,6 +122,13 @@ const createOrder = async (req, res) => {
             orderId: order._id,
           }
         );
+      })
+    );
+    Promise.all(
+      meals.map(async (meal) => {
+        const mealDetails = await Meal.findById(meal._id);
+        mealDetails.stock -= meal.qty;
+        await mealDetails.save();
       })
     );
   } catch (error) {

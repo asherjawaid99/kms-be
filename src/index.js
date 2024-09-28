@@ -3,7 +3,8 @@ const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const http = require("http");
 const socket = require("socket.io");
-const {addUser, remove user} = require("./functions/socketFunctions");
+const {addUser, removeUser} = require("./functions/socketFunctions");
+
 dotenv.config({ path: "./src/config/config.env" }); //load env vars
 
 //global vars

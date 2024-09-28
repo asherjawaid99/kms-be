@@ -23,8 +23,9 @@ const sendNotificationSocket = async (userId, data) => {
   const user = global.onlineUsers.find((user) => {
     return user.user == userId;
   });
+  console.log("user notification", user);
   if (user) {
-    user.socket.emit("notification", data);
+    global.io.to(user.socket).emit("notification", data);
   }
 };
 
