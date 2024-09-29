@@ -24,7 +24,7 @@ const getAllOrders = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
-    const roleFilter = req.user.role === "admin" ? {} : { user: req.user._id };
+    const roleFilter = req.user.role === "user" ? { user: req.user._id } :{};
 
     const orders = await Order.find({
       ...searchFilter,

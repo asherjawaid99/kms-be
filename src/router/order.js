@@ -7,6 +7,6 @@ router.route("/").get(isAuthenticated, order.getAllOrders);
 router.route("/:id").get(isAuthenticated, order.getOrder);
 router.route("/cart/checkout").post(order.checkout);
 router.route("/").post(isAuthenticated, order.createOrder);
-router.route("/update-status/:id").put(isAuthenticated, isAdmin, order.updateOrderStatus);
+router.route("/update-status/:id").put(isAuthenticated, order.updateOrderStatus);
 
 module.exports = router;
